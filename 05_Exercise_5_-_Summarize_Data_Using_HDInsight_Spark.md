@@ -29,10 +29,10 @@ Synopsis: In this exercise, attendees will prepare a summary of flight delay dat
 
     ```scala
     val flightDelayTextLines = spark.sparkContext.textFile("wasb:///flights/ScoredFlightsAndWeather.csv")
-case class AirportFlightDelays(OriginAirportCode:String,OriginLatLong:String,Month:Integer,Day:Integer,Hour:Integer,Carrier:String,DelayPredicted:Integer,DelayProbability:Double)
-val flightDelayRowsWithoutHeader = flightDelayTextLines.map(s => s.split(",")).filter(line => line(0) != "OriginAirportCode")
-
-val resultDataFrame = flightDelayRowsWithoutHeader.map(
+    case class AirportFlightDelays(OriginAirportCode:String,OriginLatLong:String,Month:Integer,Day:Integer,Hour:Integer,Carrier:String,DelayPredicted:Integer,DelayProbability:Double)
+    val flightDelayRowsWithoutHeader = flightDelayTextLines.map(s => s.split(",")).filter(line => line(0) != "OriginAirportCode")
+    
+    val resultDataFrame = flightDelayRowsWithoutHeader.map(
     s => AirportFlightDelays(
         s(0), //Airport code
         s(13) + "," + s(14), //Lat,Long
@@ -43,9 +43,9 @@ val resultDataFrame = flightDelayRowsWithoutHeader.map(
         s(11).toInt, //DelayPredicted
         s(12).toDouble //DelayProbability
         )
-).toDF()
-
-resultDataFrame.write.mode("Overwrite").saveAsTable("FlightDelays")
+        ).toDF()
+        
+        resultDataFrame.write.mode("Overwrite").saveAsTable("FlightDelays")
     ```
 
 1. Click the **Play** icon at the top of the screen to execute this code and create the FlightDelays table. You will know a command is executing by the asterisk to the left of the box. Once the command has completed, the asterisk will be replaced with a number.
