@@ -126,44 +126,47 @@ If, for whatever reason, you cannot complete this lab whether due to time contra
 
     ```json
     {
-        "name": "PredictivePipeline",
-        "properties": {
-            "description": "Use AzureML model",
-            "activities": [
-                {
-                    "type": "AzureMLBatchExecution",
-                    "typeProperties": {
-                        "webServiceInput": "AzureBlobDataInPut",
-                        "webServiceOutputs": {
-                            "output1": "AzureBlobScoredDataOutPut"
-                        },
-                        "globalParameters": {}
-                    },
-                    "inputs": [
-                        {
-                            "name": "AzureBlobDataInPut"
+    "name": "PredictivePipeline",
+    "properties": {
+        "activities": [
+            {
+                "name": "ML Batch Execution1",
+                "type": "AzureMLBatchExecution",
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "webServiceInputs": {
+                        "input1": {
+                            "filePath": "sparkcontainer/FlightsAndWeather.csv",
+                            "linkedServiceName": {
+                                "referenceName": "OutputLinkedService_AzureBlobStorage",
+                                "type": "LinkedServiceReference"
+                            }
                         }
-                    ],
-                    "outputs": [
-                        {
-                            "name": "AzureBlobScoredDataOutPut"
-                        }
-                    ],
-                    "policy": {
-                        "timeout": "02:00:00",
-                        "concurrency": 1,
-                        "executionPriorityOrder": "NewestFirst",
-                        "retry": 1
                     },
-                    "name": "MLActivity",
-                    "description": "prediction analysis on batch input",
-                    "linkedServiceName": "AzureMLLinkedService"
+                    "webServiceOutputs": {
+                        "output1": {
+                            "filePath": "sparkcontainer/ScoredFlightsAndWeather.csv",
+                            "linkedServiceName": {
+                                "referenceName": "OutputLinkedService_AzureBlobStorage",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "AzureMLLinkedService",
+                    "type": "LinkedServiceReference"
                 }
-            ],
-            "start": "2016-09-14T00:00:00Z",
-            "end": "2016-09-15T00:00:00Z"
-        }
+            }
+        ]
     }
+}
     ```
 1. Make sure to change the start to today's date and end to today + 1 date.
 2. Click **Deploy**.
